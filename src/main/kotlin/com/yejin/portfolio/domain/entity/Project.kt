@@ -20,38 +20,33 @@ class Project(
     var id: Long? = null
 
     var name: String = name
-
     var description: String = description
-
     var startYear: Int = startYear
-
     var startMonth: Int = startMonth
-
     var endYear: Int? = endYear
-
     var endMonth: Int? = endMonth
-
     var isActive: Boolean = isActive
-
 
     @OneToMany(
         targetEntity = ProjectDetail::class,
         fetch = FetchType.LAZY,
-        cascade = [CascadeType.ALL]
+        cascade = [CascadeType.PERSIST]
     )  //프로젝트가 저장되거나 삭제될 때, 연관된 모든 ProjectDetail들도 함께 저장되거나 삭제
     @JoinColumn(name = "project_id")
     var details: MutableList<ProjectDetail> = mutableListOf()
 
     //mappedby 프로젝트에 의해서 맵핑이 되는 거고 맵핑을 하는 친구는 프로젝트 스킬인것이다. 프로젝트 스킬이 주인
-    @OneToMany(mappedBy = "project")  //mappedBy - 양방향 연관관계에서의 주인을 지정을 할 때 사용. 프로젝트 스킬 안에다 프로젝트라는 것을 추가할건데 그안에 있을 프로젝트를 통해서 맵핑이 된다는 의미.
+    @OneToMany(
+        mappedBy = "project",
+        fetch = FetchType.LAZY,
+        cascade = [CascadeType.PERSIST]
+    )  //mappedBy - 양방향 연관관계에서의 주인을 지정을 할 때 사용. 프로젝트 스킬 안에다 프로젝트라는 것을 추가할건데 그안에 있을 프로젝트를 통해서 맵핑이 된다는 의미.
     var skills: MutableList<ProjectSkill> = mutableListOf()
-
     fun getEndYearMonth(): String {  //화면에 표시할 종료연월을 표시, 가지고 올 때 이 함수 호출
-        if (endMonth == null || endYear == null) {
+        if (endYear == null || endMonth == null) {
             return "Present"
         }
-
-        return "${endYear}.${endMonth}"  //2023.11
+        return "${endYear}.${endMonth}"
     }
 
     fun update(

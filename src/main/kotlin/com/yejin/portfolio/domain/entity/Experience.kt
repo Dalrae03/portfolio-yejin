@@ -1,5 +1,6 @@
 package com.yejin.portfolio.domain.entity
 
+//import jakarta.persistence.*
 import jakarta.persistence.*
 
 
@@ -20,19 +21,12 @@ class Experience(
     var id: Long? = null
 
     var title: String = title
-
     var description: String = description
-
     var startYear: Int = startYear
-
     var startMonth: Int = startMonth
-
     var endYear: Int? = endYear
-
     var endMonth: Int? = endMonth
-
     var isActive: Boolean = isActive
-
 
     //Experience Entitiy 같은 경우, Experience Detail이랑 1대 n관계를 가지고 있다.
     //Experiecne instance 한 개에 여러개의 Experience Detail이 들어갈 수 있는 구조
@@ -40,7 +34,7 @@ class Experience(
     //앞의 one이 experience가 되고 many 쪽이 experience detail이 된다. 그래서 그 두개의 관계가 1대다의 관계를 가지고 있다고 JPA에 알리는 기능을 함
     @OneToMany(
         targetEntity = ExperienceDetail::class,
-        fetch = FetchType.LAZY, //Fetch type eager 도 있는데 이건 부모에 문제가 있으면 자식까지 싸그리 잡아서 뒤지는 타입이라 걍 쓰지마라 너무 비효율적이다
+        fetch = FetchType.LAZY,  //Fetch type eager 도 있는데 이건 부모에 문제가 있으면 자식까지 싸그리 잡아서 뒤지는 타입이라 걍 쓰지마라 너무 비효율적이다
         cascade = [CascadeType.ALL]  //all로 인해서 experience가 영속성에 들어가면서 얘가 가지고있는 디테일들도 같이 들어감. 같이 인서트 쿼리가 남
     )  //영속성 콘텍스트와 관련있다. 이 엔티티에서 영속성 콘텍스트에 들어가거나 빠지거나 변화가 있었을 때 그 자식엔티티도 같이 넣어주냐 빼주냐 정하는 옵션 (ALL은 모든 변화에다가 자식엔티티도 똑같이 적용한다고 하는 것)
     @JoinColumn(name = "experience_id")  //맵핑의 기준이 뭔지, 그 맵핑의 기준이 되는 컬럼을 알려주는 기능을 함
@@ -48,11 +42,10 @@ class Experience(
     //mutable - 변화할 수 있다라는 의미
 
     fun getEndYearMonth(): String {  //화면에 표시할 종료연월을 표시, 가지고 올 때 이 함수 호출
-        if (endMonth == null || endYear == null) {
+        if (endYear == null || endMonth == null) {
             return "Present"
         }
-
-        return "${endYear}.${endMonth}"  //2023.11
+        return "${endYear}.${endMonth}"
     }
 
     //받아온 데이터를 필드에다가 업데이트 해주는 기능

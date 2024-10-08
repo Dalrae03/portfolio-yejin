@@ -1,5 +1,6 @@
 package com.yejin.portfolio.domain.entity
 
+//import jakarta.persistence.*
 import jakarta.persistence.*
 import jakarta.servlet.http.HttpServletRequest
 
@@ -7,8 +8,7 @@ import jakarta.servlet.http.HttpServletRequest
 //http요청정보를 저장하기 위한 엔티티
 @Entity
 class HttpInterface(
-    httpServletRequest: HttpServletRequest
-//스프링에서 요청을 받을 때 리퀘스트에 대한 정보를 여기에 담아준다. 이 안에서 우리가 필요로 하는 클라이언트 정보를 꺼내올것이다.
+    httpServletRequest: HttpServletRequest  //스프링에서 요청을 받을 때 리퀘스트에 대한 정보를 여기에 담아준다. 이 안에서 우리가 필요로 하는 클라이언트 정보를 꺼내올것이다.
 ) : BaseEntity() {
 
     @Id
@@ -24,9 +24,9 @@ class HttpInterface(
     var referer: String? = httpServletRequest.getHeader("referer")
 
     //클라이언트와 관련된 ip주소같은 것들 3가지
-    var localAddress: String? = httpServletRequest.localAddr
+    var localAddr: String? = httpServletRequest.localAddr
 
-    var remoteAddress: String? = httpServletRequest.remoteAddr
+    var remoteAddr: String? = httpServletRequest.remoteAddr
 
     var remoteHost: String? = httpServletRequest.remoteHost
 
@@ -34,6 +34,5 @@ class HttpInterface(
     var requestUri: String? = httpServletRequest.requestURI
 
     //브라우저 정보
-    var userAgent: String? = httpServletRequest.getHeader("User-Agent")
-
+    var userAgent: String? = httpServletRequest.getHeader("user-agent")
 }
