@@ -25,5 +25,5 @@ interface ProjectRepository : JpaRepository<Project, Long> {
     fun findAllByIsActive(isActive: Boolean): List<Project>
 
     @Query("select p from Project p left join fetch p.details where p.id = :id")
-    override fun findById(id: Long): Optional<Project>  //project를 받음
+    override fun findById(id: Long): Optional<Project>  //project로 받음
 }
