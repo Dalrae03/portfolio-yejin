@@ -3,6 +3,7 @@ package com.yejin.portfolio.domain.repository
 import com.yejin.portfolio.domain.entity.Achievement
 import org.springframework.data.jpa.repository.JpaRepository
 
+//spring data jpa 리포지토리 인터페이스 - 데이터베이스와 상호작용하는 계층을 쉽게 관리하기 위해 제공되는 기능. 이 인터페이스를 통해 개발자는 복잡한 SQL 쿼리를 작성하지 않고도 데이터베이스에서 데이터를 조회, 저장, 수정, 삭제하는 작업을 할 수 있다.
 //interface -> 인터페이스를 정의하는 키워드로, 클래스가 반드시 구현해야 하는 메서드의 계약(Contract)을 정의하는 역할
 //자바나 코틀린에서 인터페이스는 객체 지향 프로그래밍의 중요한 개념 중 하나로, 특정 기능이나 메서드를 명시하고, 이를 상속받는 클래스가 그 메서드를 구현하도록 강제한다
 //AchievementRepository는 JpaRepository를 상속받는 인터페이스.
