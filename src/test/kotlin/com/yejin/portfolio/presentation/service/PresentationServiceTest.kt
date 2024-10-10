@@ -11,6 +11,8 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
 
+//단위 테스트 - 테스트하고자 하는 대상의 기능에 집중을 해 가지고 그거 하나만 딱 검증을 한다는 개념
+//일반적으로 Mockito 라이브러리를 활용. 테스트하고자하는 대상이 의존을 하는 다른것을 모킹하여 테스트 진행
 
 //목(Mock): 목은 테스트에서 사용하는 가짜 객체.
 //실제 구현을 호출하지 않고, 미리 정의된 동작을 수행하도록 만들어진 객체.
@@ -18,7 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension
 
 //모킹(Mocking): 모킹은 목 객체의 동작을 정의하는 것을 의미.
 //위 코드에서 Mockito.when(presentationRepository.getActiveIntroductions())은 presentationRepository가 호출되었을 때 어떤 데이터를 반환할지 미리 정의하는 모킹 과정. 이렇게 하면 실제 데이터베이스에 접근하지 않고도, 특정 조건에 대한 동작을 정의하여 테스트할 수 있다.
-
 
 @ExtendWith(MockitoExtension::class)
 class PresentationServiceTest {
