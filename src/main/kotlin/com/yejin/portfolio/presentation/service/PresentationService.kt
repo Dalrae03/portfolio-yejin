@@ -10,8 +10,10 @@ import org.springframework.transaction.annotation.Transactional
 
 //Spring Framework에서 사용하는 어노테이션 중 하나로, 서비스 계층을 나타냄
 //서비스 계층은 비즈니스 로직을 처리하는 역할을 하며, @Service 어노테이션은 해당 클래스가 Spring의 서비스 컴포넌트임을 표시하고, 자동으로 빈(Bean)으로 등록되도록 한다.
+//이 계층에서는 주로 데이터 처리, 트랜잭션 관리, 도메인 로직 등을 수행
 //이 어노테이션을 사용하면 다른 클래스에서 주입(Injection)받아 사용할 수 있음.
 @Service
+//여러 메서드를 통해 PresentationRepository로부터 데이터를 조회하고, 이를 적절한 형태의 DTO(Data Transfer Object)로 변환하여 반환하는 역할
 class PresentationService(
     private val presentationRepository: PresentationRepository  //생성자 의존성 주입
 ) {

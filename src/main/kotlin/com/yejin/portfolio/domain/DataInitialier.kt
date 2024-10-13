@@ -7,9 +7,10 @@ import jakarta.annotation.PostConstruct
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.time.LocalDate
-import java.time.Year
 
-//스프링 IoC 컨테이너에 의해 관리되는 빈(Bean) 객체로 등록하기 위해 클래스 위에 붙이는 어노테이션 (스프링에서 관리하는 인스턴스(객체)를 빈이라고 부른다)
+//현 클래스는 스프링 애플리케이션이 실행될 때 특정 테스트 데이터를 데이터베이스에 초기화하는 역할. 스프링 프로파일이 "default"로 설정된 경우에만 이 클래스가 동작하며, 주로 개발 환경에서 사용
+
+//@Component - 스프링 IoC 컨테이너에 의해 관리되는 빈(Bean) 객체로 등록하기 위해 클래스 위에 붙이는 어노테이션 (스프링에서 관리하는 인스턴스(객체)를 빈이라고 부른다)
 //개발자는 직접 객체 생성(생성자로 인스턴스를만들어서 사용)을 하지 않고도 스프링 컨테이너가 객체를 관리하고, 의존성 주입(Dependency Injection)을 할 수 있게 된다
 //스프링이 처음에 실행이 되면서 컴포넌트 스캔이라는 과정을 거치는데 그 과정에서 컴포넌트 어노테이션이 붙은것들을 다 찾아서 인스턴스를 만들어가지고 별도로 관리를 한다
 //다른 인스턴스에서 이렇게 만들어진 빈들을 사용하려면 그 인스턴스를 주입받아 사용하면 된다. (의존성 주입 / DI방법)
@@ -25,9 +26,13 @@ class DataInitialier(  //괄호안 -> 생성자 만들어주는 것(?)
     private val projectRepository: ProjectRepository,
     private val experienceRepository: ExperienceRepository
 ) {
-    //메인메소드가 실행이 되면 스프링을 구축할 텐데, 그때 Spring DI가 컴포넌트 스캔을 해 가지고 필요한 것을 찾고 인스턴스를 생성을하고 의존성을 주입을 하는 식으로 스프링픅고젝트를 컨스트럭트를 함
-    //이렇게 스프링을 초기화 하는 작업이 완료가 되면은 이렇게 포스트 컨스트럭트가 붙은 메소드를 찾아서 한번 더 실행 -> 실행까지 한 다음에 스프링 실행이 완료되는 것
+    //메인메소드가 실행이 되면 스프링을 구축할 텐데, 그때 Spring DI가 컴포넌트 스캔을 해 가지고 필요한 것을 찾고 인스턴스를 생성을하고 의존성을 주입을 하는 식으로 스프링프로젝트를 컨스트럭트를 함
+    //이렇게 스프링을 초기화 하는 작업이 완료가 되면은 이렇게 포스트 컨스트럭트가 붙은 메소드를 찾아서 한번 더 실행 -> 실행까지 한 다음에 스프링 실행이 완료되는 것 (스프링이 모든 의존성 주입을 완료한 후 자동으로 호출)
     //그래서 postConstruct에서 테스트 데이터들을 초기화 시켜주는 것.
+    //@PostConstruct - 스프링에서 의존성 주입이 완료된 후에 실행되어야 하는 초기화 작업을 지정할 때 사용하는 어노테이션 (자바 표준 어노테이션)
+    //이 메서드에서는 다양한 엔티티들(Achievement, Introduction, Link, Experience 등)을 생성하고, 각 엔티티들을 데이터베이스에 저장하는 작업을 수행
+    //성과(Achievement), 소개(Introduction), 링크(Link), 경험(Experience), 기술(Skill), 프로젝트(Project) 등의 데이터를 리스트로 생성하고, 각각의 JPA 레포지토리를 이용해 데이터베이스에 저장.
+    //여러 엔티티들을 연관 지어, 더 복잡한 객체 관계도 초기화(예: Experience와 ExperienceDetail, Project와 ProjectDetail 및 ProjectSkill 등).
     @PostConstruct
     fun initializeData() {
         //println 출력 운영에서 절대 사용 x.
@@ -36,20 +41,20 @@ class DataInitialier(  //괄호안 -> 생성자 만들어주는 것(?)
 
         //<Achievement> -> 하단의 mutable list는 achievement객체를 받는다는 것을 명시 (엔티티에 선언했던거 말하는 건가봐)
         val achievements = mutableListOf<Achievement>(
-                Achievement(
-                    title = "Catkao 해커톤 최우수상",
-                    description = "고양이 쇼핑몰 검색 서비스의 아키텍처, 데이터 모델링, API 개발 역할 수행",
-                    host = "캣카오",
-                    achievedDate = LocalDate.of(2022, 8, 1),
-                    isActive = true
-                ),
-                Achievement(
-                    title = "정보처리기사",
-                    description = "자료구조, 운영체제, 알고리즘, 데이터베이스 등",
-                    host = "한국산업인력공단",
-                    achievedDate = LocalDate.of(2020, 2, 2),
-                    isActive = true
-                )
+            Achievement(
+                title = "Catkao 해커톤 최우수상",
+                description = "고양이 쇼핑몰 검색 서비스의 아키텍처, 데이터 모델링, API 개발 역할 수행",
+                host = "캣카오",
+                achievedDate = LocalDate.of(2022, 8, 1),
+                isActive = true
+            ),
+            Achievement(
+                title = "정보처리기사",
+                description = "자료구조, 운영체제, 알고리즘, 데이터베이스 등",
+                host = "한국산업인력공단",
+                achievedDate = LocalDate.of(2020, 2, 2),
+                isActive = true
+            )
         )
         //achievementRepository -> 생성자에서 주입받은 Spring Bean
         //AchievementRepository, Jpa레포지토리 상속
