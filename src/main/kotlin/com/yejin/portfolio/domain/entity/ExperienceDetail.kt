@@ -16,6 +16,7 @@ class ExperienceDetail(content: String, isActive: Boolean) : BaseEntity() {
 
     //is_Active 같은 jpa에서 알아서 맵핑될 수 있는 칼럼을 찾아가지고 설정한다.
     var isActive: Boolean = isActive
+
     fun update(content: String, isActive: Boolean) {
         this.content = content
         this.isActive = isActive
