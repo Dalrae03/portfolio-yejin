@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="card(project)" class="card shadow border-0 rounded-4 mb-5">
+    <div class="card-body p-5">
+        <div class="row align-items-center gx-5">
+            <div class="col text-center text-lg-start mb-4 mb-lg-0">
+                <div class="bg-light p-4 rounded-4">
+                    <div class="text-primary fw-bolder mb-2"
+                         th:text="|${project.startYearMonth} - ${project.endYearMonth}|">2019 - Present
+                    </div>
+                    <!--프로젝트가 가지고 있는 그 스킬에 대해서 반복을 돌려줄 것-->
+                    <!--프로젝트가 갖고있는 스킬dto리스트(${project.skills})에 대해서 반복을 할 거고 그대 이 스킬에서 이 스킬의 이름(${skill.name})을 꺼내와가지고 여기있는 텍스트(Stark Industries)를 바꿔치기할 것-->
+                    <!--d-inline - 반복된 것들을 각각의 한줄씩 차지하는게 아니라 3개가 붙어서 나올 수 있도록 한다.-->
+                    <div class="small text-muted d-inline" th:each="skill : ${project.skills}" th:text="${skill.name}">
+                        Stark Industries
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="lead fw-bolder" th:text="${project.name}">Web Developer</div>
+                <p></p>
+                <div class="small" th:text="${project.description}">Lorem ipsum dolor sit amet consectetur adipisicing
+                    elit.
+                </div>
+                <!--프로젝트 디테일들을 한줄씩 뿌릴건데 조금구분을 주기 위해 빈p 태그-->
+                <p></p>
+                <th:block th:each="detail : ${project.details}">
+                    <!--th:if를 이용해서 url이 있을 때랑 없을 때 표시하는 내용을 다르게 하려고 함-->
+                    <!--.isEmpty() - 타임리프 문법. 디테일이 null이거나 비어있는 내용이면 is Empty니까 ture된다. 그때 * ${detail.content}표시-->
+                    <div class="small" th:if="${#strings.isEmpty(detail.url)}" th:text="|* ${detail.content}|">Lorem
+                        ipsum dolor sit amet consectetur adipisicing elit.
+                    </div>
+                    <a class="small" target="_blank" th:if="${!#strings.isEmpty(detail.url)}"
+                       th:text="|* ${detail.content}|" th:href="${detail.url}">Lorem ipsum dolor sit amet consectetur
+                        adipisicing elit.</a>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
