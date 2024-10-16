@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="list(skills, skillType)" class="mb-0">
+    <div class="d-flex align-items-center mb-4">
+        <h3 class="fw-bolder mb-0"><span class="text-gradient d-inline" th:text="${skillType}">Languages</span></h3>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 mb-4">
+        <th:block th:each="skill : ${skills}">
+            <!--th:if - 안의 조건이 true일때만 보여주는 태그-->
+            <!--스킬의 타입이 파라미터를 받은 스킬 타입이랑 같을 때-->
+            <!--스킬타입을 뷰 컨트롤러에서 같이 넣어줬기 때문에 resume에서 스킬타입 4개에 대해서 for문을 돌리면서 파라미터인 skillType에 넣어줄 것-->
+            <!--skills파라미터는 리스트 전체가 들어옴. 그래서 그 전체 리스트에 있는 스킬들을 각각 돌면서 그것의 타입(skill.type)과 여기서 받은 타입을 비고해가지고 일치할 때만 이 div태그를 html에 그려줌-->
+            <div class="col mb-4 mb-md-0" th:if="${skill.type == skillType}">
+                <div class="d-flex align-items-center bg-light rounded-4 p-3 h-100" th:text="${skill.name}">HTML</div>
+            </div>
+        </th:block>
+    </div>
+</div>
+</body>
+</html>
