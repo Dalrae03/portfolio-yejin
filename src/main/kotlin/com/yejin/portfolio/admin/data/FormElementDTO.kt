@@ -9,3 +9,24 @@ abstract class FormElementDTO(
     val type: String
     //이 세개를 가지고 어드밋 페이지 화면에서 데이터를 넣는 form의 크기라던가 이름이라던가 종류등을 결정하게 해줄 것.
 )
+
+
+//html의 다양한 input폼 형태의 유형을 정해주는 것.
+//서버에서 필요한 폼들의 리스트를 던져주면 그 리스트 안의 내용들이 상단의 name, size, type가 될거고 프론트에서 이 개체안에 있는 3가지 것들을 가지고 type을 구분하여 각각의 경우에 맞게 폼을 그려줄 수 있게 선택을 하는 것
+class TextFormElementDTO(
+    name: String,
+    size: Int
+) : FormElementDTO(name = name, size = size, type = "text")  //FormElementDTO 상속받음
+
+class DateFormElementDTO(
+    name: String,
+    size: Int
+) : FormElementDTO(name = name, size = size, type = "date")
+
+class SelectFormElementDTO(
+    name: String,
+    size: Int,
+    options: List<Any>
+) : FormElementDTO(name = name, size = size, type = "select") {
+    val options: List<Any> = options
+}
