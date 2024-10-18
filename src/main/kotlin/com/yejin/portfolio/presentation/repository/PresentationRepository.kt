@@ -21,7 +21,7 @@ class PresentationRepository(
     private val skillRepository: SkillRepository
 ) {
     fun getActiveAchievements(): List<Achievement> {
-        return achievementRepository.findAllByIsActive(true)
+        return achievementRepository.findAllByIsActive(true)  //여러개의 achievement 엔티티 객체를 하나의 리스트에 담아 반환
     }
 
     fun getActiveExperiences(): List<Experience> {

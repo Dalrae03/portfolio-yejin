@@ -9,5 +9,8 @@ class AdminInterceptorConfiguration(
     val adminInterceptor: AdminInterceptor
 ) : WebMvcConfigurer {
     override fun addInterceptors(registry: InterceptorRegistry) {
+        registry.addInterceptor(adminInterceptor)  //어떤 경로에서 이 인터셉터(adminInterceptor)가 동작을 할 지 그 경로 지정
+            .addPathPatterns("/admin/**")
+            .excludePathPatterns("/assets/**", "/css/**", "/js/**", "/h2**")
     }
 }
