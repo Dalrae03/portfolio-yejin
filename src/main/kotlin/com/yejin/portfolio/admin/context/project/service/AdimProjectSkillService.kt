@@ -1,7 +1,12 @@
 package com.yejin.portfolio.admin.context.project.service
 
+import com.yejin.portfolio.admin.context.project.form.ProjectSkillForm
 import com.yejin.portfolio.admin.data.TableDTO
+import com.yejin.portfolio.admin.exception.AdminBadReqeustException
+import com.yejin.portfolio.admin.exception.AdminInternalServerErrorException
+import com.yejin.portfolio.domain.entity.ProjectSkill
 import com.yejin.portfolio.domain.repository.ProjectRepository
+import com.yejin.portfolio.domain.repository.ProjectSkillRepository
 import com.yejin.portfolio.domain.repository.SkillRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -9,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class AdminProjectSkillService(
     private val projectRepository: ProjectRepository,
-    private val skillRepository: SkillRepository
+    private val skillRepository: SkillRepository,
+    private val projectSkillRepository: ProjectSkillRepository
 ) {
     @Transactional
     fun getProejectSkillTable(): TableDTO {
@@ -50,5 +56,46 @@ class AdminProjectSkillService(
     fun getSkillList(): List<String> {
         val skills = skillRepository.findAll()
         return skills.map { "${it.id} (${it.name})" }.toList()
+    }
+
+    @Transactional
+    fun save(form: ProjectSkillForm) {
+        //"id (name)" 이런 형식의문자열 로 들어올 것
+        // 이미 매핑된 Project - Skill 여부 검증.
+        val projectId = parseId(form.project)
+        val skillId = parseId(form.skill)
+        projectSkillRepository.findByProjectIdAndSkillId(projectId, skillId)  //중복 매핑을 방지하기 위해 있는 로직
+            .ifPresent { throw AdminBadReqeustException("이미 매핑된 데이터입니다.") }  //옵셔널로 받아서 옵셔널에 데이터가 있으면 그때 예외 던질 것
+
+        // 유효한 ProjectSkill 생성
+        val project = projectRepository.findById(projectId)
+            .orElseThrow { throw AdminBadReqeustException("ID ${projectId}에 해당하는 데이터를 찾을 수 없습니다.") }
+
+        val skill = skillRepository.findById(skillId)
+            .orElseThrow { throw AdminBadReqeustException("ID ${skillId}에 해당하는 데이터를 찾을 수 없습니다.") }
+
+        //프로젝트와 스킬을 가지고 왔다면.
+        val projectSkill = ProjectSkill(
+            project = project,
+            skill = skill
+        )
+        project.skills.add(projectSkill)  //db에서 조회해오면서 영속성에 이미 들어간 프로젝트가 처음에가지고온 스냅샷이랑 지금 현재 상태랑 다르니까 jpa에서 업데이트를 날려줄 것
+    }
+
+    //"id (name)" 이 형식에서 id만 추출할 수 있도록 하는 함수
+    private fun parseId(line: String): Long {
+        try {
+            val endIndex = line.indexOf(" ") - 1  //아이디의 마지막 인덱스는 스페이스 바로 앞일테니까 -1
+            val id = line.slice(0..endIndex).toLong()
+            return id
+        } catch (e: Exception) {
+            throw AdminInternalServerErrorException("ID 추출 중 오류가 발생했습니다.")
+        }
+    }
+
+    //삭제
+    @Transactional
+    fun delete(id: Long) {
+        projectSkillRepository.deleteById(id)
     }
 }
