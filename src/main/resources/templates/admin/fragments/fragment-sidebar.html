@@ -4,220 +4,43 @@
 <aside id="sidebar" class="sidebar" th:fragment="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
         <li class="nav-item">
-            <a class="nav-link collapsed" href="index.html">
+            <!--th:classappend - th:calss는 여기 들어온 내용을 기존 클래스에다가 완전히 바꿔치는 것이지만 이건 여기 들어가있는 내용을 기존 클래스는 그대로 두고 그 뒤에다가 추가해주는 그런 기능-->
+            <!--pageName - 컨트롤러에서 모델에 넣어준 그 페이지 네임-->
+            <!--페이지 네임이 일치하지 않을 경우는 collapse라는 문자열을 클래스에다가 넣어준다.-->
+            <!--collapsed 넣는 이유 - 이것을 통해서 지금 보고 있는 페이지를 사이드바에서 하이라이팅을 해주기 위함-->
+            <a class="nav-link collapsed" href="index.html" th:href="@{/admin}"
+               th:classappend="${'Dashboard' != pageName} ? 'collapsed'">
                 <i class="bi bi-grid"></i>
                 <span>Dashboard</span>
             </a>
         </li><!-- End Dashboard Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-menu-button-wide"></i><span>Components</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="components-alerts.html">
-                        <i class="bi bi-circle"></i><span>Alerts</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="components-accordion.html">
-                        <i class="bi bi-circle"></i><span>Accordion</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="components-badges.html">
-                        <i class="bi bi-circle"></i><span>Badges</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="components-breadcrumbs.html">
-                        <i class="bi bi-circle"></i><span>Breadcrumbs</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="components-buttons.html">
-                        <i class="bi bi-circle"></i><span>Buttons</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="components-cards.html">
-                        <i class="bi bi-circle"></i><span>Cards</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="components-carousel.html">
-                        <i class="bi bi-circle"></i><span>Carousel</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="components-list-group.html">
-                        <i class="bi bi-circle"></i><span>List group</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="components-modal.html">
-                        <i class="bi bi-circle"></i><span>Modal</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="components-tabs.html">
-                        <i class="bi bi-circle"></i><span>Tabs</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="components-pagination.html">
-                        <i class="bi bi-circle"></i><span>Pagination</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="components-progress.html">
-                        <i class="bi bi-circle"></i><span>Progress</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="components-spinners.html">
-                        <i class="bi bi-circle"></i><span>Spinners</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="components-tooltips.html">
-                        <i class="bi bi-circle"></i><span>Tooltips</span>
-                    </a>
-                </li>
-            </ul>
-        </li><!-- End Components Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-journal-text"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="forms-elements.html">
-                        <i class="bi bi-circle"></i><span>Form Elements</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="forms-layouts.html">
-                        <i class="bi bi-circle"></i><span>Form Layouts</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="forms-editors.html">
-                        <i class="bi bi-circle"></i><span>Form Editors</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="forms-validation.html">
-                        <i class="bi bi-circle"></i><span>Form Validation</span>
-                    </a>
-                </li>
-            </ul>
-        </li><!-- End Forms Nav -->
-        <li class="nav-item">
-            <a class="nav-link " data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i
+
+        <li class="nav-heading">Pages</li>
+
+        <!--menus - adminInterceptor에 menus라고 넣은 내용에 대해 반복이 되는 것-->
+        <li class="nav-item" th:each="menu : ${menus}">
+            <!--ata-bs-target이 #tables-nav의 내부, 이게 이 메뉴의 이름 따라가지고 인덱스라면 '#index-nav'처럼 data-bs 어트리뷰트를 추가해줄 것
+            th:attr - 타임리프에서 제공하지 않는 속성들(data-bs-target)을 추가해주는 기능. 그래서 키(data-bs-target)랑 값(#strings)을 같이 넣어줌
+            각 메뉴마다 클릭을 했을 때 대메뉴가 열리고 닫히고 하는 기능을 구현하기 위해서 data-vs-target을 커스터마이징 해줌-->
+            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#"
+               th:attr="data-bs-target='#'+${#strings.toLowerCase(menu.name)}+'-nav'">
+                <i class="bi bi-layout-text-window-reverse"></i><span th:text="${menu.name}">Tables</span><i
                     class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="tables-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="tables-general.html">
-                        <i class="bi bi-circle"></i><span>General Tables</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="page-table.html" class="active">
-                        <i class="bi bi-circle"></i><span>Data Tables</span>
+            <!--menu.name - th:each에서 반복되는 menu / menuName - 컨트롤러에서 모델을 넣어준 그 네임-->
+            <!--같으면 show추가. show가 있다면 하단의 메뉴가 열린다 보면 됨-->
+            <!--선택한 페이지와 메뉴 이름이 같을 경우에만 쇼라는 걸 추가해서 사이드바에서 메뉴가 열리게 할 것.-->
+            <ul id="tables-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav"
+                th:classappend="${menu.name == menuName} ? 'show'" th:id="${#strings.toLowerCase(menu.name)}+'-nav'">
+                <li th:each="page : ${menu.pages}">  <!--리스트를 각 페이지에 대해서 돌려줌. 메뉴DTO에 넣어준 페이지DTO를 반복하는 것-->
+                    <a href="page-table.html" th:classappend="${page.name == pageName} ? 'active'"
+                       th:href="${page.url}">
+                        <i class="bi bi-circle"></i><span th:text="${page.name}">Data Tables</span>
                     </a>
                 </li>
             </ul>
         </li><!-- End Tables Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-bar-chart"></i><span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="charts-chartjs.html">
-                        <i class="bi bi-circle"></i><span>Chart.js</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="charts-apexcharts.html">
-                        <i class="bi bi-circle"></i><span>ApexCharts</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="charts-echarts.html">
-                        <i class="bi bi-circle"></i><span>ECharts</span>
-                    </a>
-                </li>
-            </ul>
-        </li><!-- End Charts Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-gem"></i><span>Icons</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="icons-bootstrap.html">
-                        <i class="bi bi-circle"></i><span>Bootstrap Icons</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="icons-remix.html">
-                        <i class="bi bi-circle"></i><span>Remix Icons</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="icons-boxicons.html">
-                        <i class="bi bi-circle"></i><span>Boxicons</span>
-                    </a>
-                </li>
-            </ul>
-        </li><!-- End Icons Nav -->
-        <li class="nav-heading">Pages</li>
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="users-profile.html">
-                <i class="bi bi-person"></i>
-                <span>Profile</span>
-            </a>
-        </li><!-- End Profile Page Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="pages-faq.html">
-                <i class="bi bi-question-circle"></i>
-                <span>F.A.Q</span>
-            </a>
-        </li><!-- End F.A.Q Page Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="pages-contact.html">
-                <i class="bi bi-envelope"></i>
-                <span>Contact</span>
-            </a>
-        </li><!-- End Contact Page Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="pages-register.html">
-                <i class="bi bi-card-list"></i>
-                <span>Register</span>
-            </a>
-        </li><!-- End Register Page Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="pages-login.html">
-                <i class="bi bi-box-arrow-in-right"></i>
-                <span>Login</span>
-            </a>
-        </li><!-- End Login Page Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="pages-error-404.html">
-                <i class="bi bi-dash-circle"></i>
-                <span>Error 404</span>
-            </a>
-        </li><!-- End Error 404 Page Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="pages-blank.html">
-                <i class="bi bi-file-earmark"></i>
-                <span>Blank</span>
-            </a>
-        </li><!-- End Blank Page Nav -->
+
     </ul>
 </aside><!-- End Sidebar-->
 </body>
