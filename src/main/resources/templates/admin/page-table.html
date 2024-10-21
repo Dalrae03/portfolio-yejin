@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--layout(~{::main}) - 메인태그를 지정을 해서 이 내용을 저기 layout안에 넣으면 레이아웃으로 넘어와 가지고 layout-admin의 메인태그와 바꿔치기가 됨
+그렇게 만든 레이아웃을 page-table로 불러와 replace를 통해 한번 더 바꿔치기 해줘서 page-table의 내용이 싹 바뀌는 구조-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/layouts/layout-admin :: layout(~{::main})}">
 <!--주소 맨 앞에 슬래쉬 안붙이는 이유 - 로컬에서 돌릴 때는 괜찮은데 도커에서는 슬래쉬를 붙이면 경로를 못찾음-->
 <div th:replace="~{admin/fragments/fragment-head :: head}"></div>
 <body>
-<!-- ======= Header ======= -->
-<div th:replace="~{admin/fragments/fragment-header :: header}"></div>
-<!-- ======= Sidebar ======= -->
-<div th:replace="~{admin/fragments/fragment-sidebar :: sidebar}"></div>
 <main id="main" class="main">
     <div class="pagetitle">
         <h1>Data Tables</h1>
@@ -84,10 +82,6 @@
         </div>
     </section>
 </main><!-- End #main -->
-<!-- ======= Footer ======= -->
-<div th:replace="~{admin/fragments/fragment-footer :: footer}"></div>
-<div th:replace="~{admin/fragments/fragment-foot :: foot}"></div>
-<div th:replace="~{admin/fragments/fragment-script-util :: util}"></div>
 </body>
 </html>
 
